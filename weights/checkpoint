@@ -1,0 +1,2 @@
+model_checkpoint_path: "katakanaWeights"
+all_model_checkpoint_paths: "katakanaWeights"
