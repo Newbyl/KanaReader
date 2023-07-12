@@ -1,22 +1,27 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
     <title>Drawing app</title>
 </head>
+
 <body>
     <section class="container">
-        <div id="toolbar">    
+        <div id="toolbar">
             <label for="lineWidth">Line Width</label>
             <input id="lineWidth" name='lineWidth' type="number" value="5">
             <button id="clear">Clear</button>
+            <p id="result">fafafa</p>
         </div>
         <div class="drawing-board">
-            <canvas id="drawing-board"></canvas>
+            <canvas id="drawing-board" width="100" height="100"></canvas>
         </div>
     </section>
-    <script src="./index.js"></script>
+    <script src="scripts.js"></script>
 </body>
+
 </html>
