@@ -2,13 +2,13 @@ const canvas = document.getElementById('drawing-board');
 const toolbar = document.getElementById('toolbar');
 const ctx = canvas.getContext('2d');
 
+const canvasRect = canvas.getBoundingClientRect();
+const canvasOffsetX = canvasRect.left;
+const canvasOffsetY = canvasRect.top;
 
 
-const canvasOffsetX = canvas.offsetLeft;
-const canvasOffsetY = canvas.offsetTop;
-
-canvas.width = 100;
-canvas.height = 100;
+canvas.width = 500;
+canvas.height = 500;
 
 canvas.style.backgroundColor = 'black';
 
@@ -23,6 +23,13 @@ toolbar.addEventListener('click', e => {
     }
 });
 
+toolbar.addEventListener('change', e => {
+    if (e.target.id === 'lineWidth') {
+        lineWidth = e.target.value;
+    }
+
+});
+
 const draw = (e) => {
     if (!isPainting) {
         return;
@@ -32,7 +39,11 @@ const draw = (e) => {
     ctx.lineCap = 'round';
     ctx.strokeStyle = 'white';
 
-    ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+    // Calculate the adjusted coordinates relative to the canvas offset
+    const adjustedX = e.clientX - canvasOffsetX;
+    const adjustedY = e.clientY - (canvasOffsetY/2) + 30;
+
+    ctx.lineTo(adjustedX, adjustedY);
     ctx.stroke();
 }
 
@@ -61,12 +72,11 @@ async function loadModel() {
 
 loadModel();
 
-// Assuming you have a variable `resultParagraph` to reference the <p> element
-const resultParagraph = document.getElementById('result');
+
 
 function preprocessData() {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    
+
     const { data, width, height } = imageData;
     const inputData = [];
 
@@ -76,28 +86,48 @@ function preprocessData() {
         const b = data[i + 2];
         inputData.push(r, g, b);
     }
-    console.log(inputData);
+    
     const inputTensor = tf.tensor4d(inputData, [1, height, width, 3]);
     const resizedTensor = tf.image.resizeBilinear(inputTensor, [100, 100]);
 
     return resizedTensor;
 }
 
-function getMostProbablePrediction(predictions) {
+function getMostProbableKana(predictions, topK) {
     const logits = predictions.arraySync()[0];
-    const maxProbabilityIndex = logits.indexOf(Math.max(...logits));
-    return maxProbabilityIndex;
+    const predictionResults = logits
+        .map((logit, index) => ({ logit, index }))
+        .sort((a, b) => b.logit - a.logit)
+        .slice(0, topK)
+        .map(({ logit, index }) => ({
+            index,
+            logit,
+        }));
+
+    return predictionResults;
 }
+
+
+
+const classNames = ['ba', 'be', 'bi', 'bo', 'bu', 'da', 'de', 'ji', 'do', 'du', 'ga', 'ge', 'gi', 'go', 'gu', 'ha', 'he', 'hi', 'ho', 'fu', 'ka', 'ke', 'ki', 'ko', 'ku', 'ma', 'me', 'mi', 'mo', 'mu', 'na', 'ne', 'ni', 'no', 'nu', 'pa', 'pe', 'pi', 'po', 'pu', 'ra', 're', 'ri', 'ro', 'ru', 'sa', 'se', 'si', 'so', 'su', 'ta', 'te', 'chi', 'to', 'tsu', 'wa', 'wo', 'u', 'ya', 'i', 'yo', 'yu', 'za', 'ze', 'ji', 'zo', 'zu'];
+
+const resultParagraph1 = document.getElementById('result1');
+const resultParagraph2 = document.getElementById('result2');
+const resultParagraph3 = document.getElementById('result3');
+const resultParagraph4 = document.getElementById('result4');
+const resultParagraph5 = document.getElementById('result5');
 
 function predictKana() {
     const input = preprocessData();
     const predictions = model.predict(input);
 
-    // Perform further processing on the predictions as needed
-    // For example, identify the most probable Kana character
-    const result = getMostProbablePrediction(predictions);
+    const result = getMostProbableKana(predictions, 5);
 
-    resultParagraph.textContent = result; // Set the result in the <p> element
+    resultParagraph1.textContent = classNames[result[0]['index']] + " : " + (result[0]['logit'] * 100).toFixed(2) + "%";
+    resultParagraph2.textContent = classNames[result[1]['index']] + " : " + (result[1]['logit'] * 100).toFixed(2) + "%";
+    resultParagraph3.textContent = classNames[result[2]['index']] + " : " + (result[2]['logit'] * 100).toFixed(2) + "%";
+    resultParagraph4.textContent = classNames[result[3]['index']] + " : " + (result[3]['logit'] * 100).toFixed(2) + "%";
+    resultParagraph5.textContent = classNames[result[4]['index']] + " : " + (result[4]['logit'] * 100).toFixed(2) + "%";
 
-    predictions.dispose(); // Clean up the memory used by the predictions
+    predictions.dispose();
 }

@@ -9,13 +9,21 @@ body {
 .container {
     height: 100%;
     display: flex;
+    background-color: #333333;
+}
+
+.drawing-board {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 30%;
 }
 
 #toolbar {
     display: flex;
     flex-direction: column;
     padding: 5px;
-    width: 70px;
+    width: 110px;
     background-color: #202020;
 }
 
