@@ -1,18 +1,31 @@
-# KanaReader
-Deep Learning model that recognize kana
+<p align="center">
+  <h1 align="center">KanaReader</h1>
+  <p align="center">Web browser app that recognize the kana that you draw</p>
+</p>
 
 ---
 
-I created this project to practice deep learning using Tensorflow.
+**This is an unofficial project solely intended for personal learning and research about deep learning**
 
----
+- **The accuracy is poor because it wasn't trained on a lot of data**
 
-## Dataset used 
+## Demo
 
-I used the [7500-unique-kana-image](https://github.com/Orzelius/7500-unique-kana-images) dataset to train the model.
+<p align="center">
+    <img src="assets/demo-KanaReader.gif" alt="drawing" width="700"/>
+</p>
 
-The model have 98.37% accuracy.
+## Training
+
+- I used the [7500-unique-kana-image](https://github.com/Orzelius/7500-unique-kana-images) dataset to train the model.
+
+- The code to train the model is **kanaReader.ipynb** notebook
 
 ## Scripts
 
-There is also 2 script written in python to put each kana in the corresponding folder and to create a validation dataset.
+I created 2 python scripts : 
+- One to put each kana in the folder of his category
+- One to create a validation dataset 
+
+---
+
