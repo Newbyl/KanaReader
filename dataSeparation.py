@@ -1,8 +1,9 @@
 import os
 import shutil
 
-source_dir = "dataset/katakanaValidation"
-destination_parent_dir = "dataset/katakanaValidationSeparated"
+#source_dir = "dataset/katakanaValidation"
+source_dir = "dataset/katakana"
+destination_parent_dir = "dataset/kanaSeparated"
 
 if not os.path.exists(destination_parent_dir):
     os.makedirs(destination_parent_dir)
