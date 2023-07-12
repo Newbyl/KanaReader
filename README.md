@@ -15,6 +15,22 @@
     <img src="assets/demo-KanaReader.gif" alt="drawing" width="700"/>
 </p>
 
+## How to use it ?
+
+Go in the app folder 
+
+    `$ cd app`
+
+Then type 
+
+    `$ http-server`
+
+This will create a local website available at the address in your terminal
+
+## Features
+
+Draw the kana into the canva, the top five results will appear in the sidebar with their probabilities to be the kana.
+
 ## Training
 
 - I used the [7500-unique-kana-image](https://github.com/Orzelius/7500-unique-kana-images) dataset to train the model.
